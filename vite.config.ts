@@ -51,4 +51,14 @@ export default defineConfig({
       autoInstall: true,
     }),
   ],
+  css:{
+    // css预处理器
+    preprocessorOptions:{
+      // 自定义全局css变量
+      scss:{
+        javascriptEnabled: true,
+        additionalData: `@use "@/styles/variables.scss" as *;`
+      }
+    }
+  }
 });

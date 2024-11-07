@@ -1,0 +1,5 @@
+// 导出variables.scss文件的变量
+// :export => scss中公共变量导出方法
+:export {
+  bgColor: $bg-color;
+}
