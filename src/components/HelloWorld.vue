@@ -3,13 +3,11 @@
 import { useCounterStore } from "@/store/counter";
 const counterStore = useCounterStore();
 
-defineProps<{ msg: string }>();
-
 // console.log(variables.bgColor);
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1>Vite + Vue</h1>
 
   <div class="card">
     <button type="button" @click="counterStore.increment">count is {{ counterStore.count }}</button>

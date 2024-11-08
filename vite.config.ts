@@ -21,7 +21,7 @@ export default defineConfig({
     vue(),
     AutoImport({
       // 要注册的全局导入
-      imports: ["vue", "pinia"],
+      imports: ["vue", "pinia", "vue-router"],
       resolvers: [
         ElementPlusResolver(),
         // 自动导入图标组件
