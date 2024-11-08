@@ -6,6 +6,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import Icons from "unplugin-icons/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import path from "path";
+import UnoCSS from 'unocss/vite'
 
 const pathSrc = path.resolve(__dirname, "src");
 
@@ -50,6 +51,7 @@ export default defineConfig({
       // 自动安装图标库
       autoInstall: true,
     }),
+    UnoCSS({ /* options */ }),
   ],
   css: {
     // css预处理器
