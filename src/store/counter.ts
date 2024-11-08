@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+// import { defineStore } from "pinia";
 
 export const useCounterStore = defineStore("counter", () => {
   // ref变量 → state 属性

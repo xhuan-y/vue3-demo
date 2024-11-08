@@ -21,7 +21,7 @@ export default defineConfig({
     vue(),
     AutoImport({
       // 要注册的全局导入
-      imports: ["vue"],
+      imports: ["vue", "pinia"],
       resolvers: [
         ElementPlusResolver(),
         // 自动导入图标组件
@@ -51,14 +51,14 @@ export default defineConfig({
       autoInstall: true,
     }),
   ],
-  css:{
+  css: {
     // css预处理器
-    preprocessorOptions:{
+    preprocessorOptions: {
       // 自定义全局css变量
-      scss:{
+      scss: {
         javascriptEnabled: true,
-        additionalData: `@use "@/styles/variables.scss" as *;`
-      }
-    }
-  }
+        additionalData: `@use "@/styles/variables.scss" as *;`,
+      },
+    },
+  },
 });
