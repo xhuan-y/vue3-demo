@@ -6,7 +6,8 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import Icons from "unplugin-icons/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import path from "path";
-import UnoCSS from 'unocss/vite'
+import UnoCSS from "unocss/vite";
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 
 const pathSrc = path.resolve(__dirname, "src");
 
@@ -51,7 +52,15 @@ export default defineConfig({
       // 自动安装图标库
       autoInstall: true,
     }),
-    UnoCSS({ /* options */ }),
+    UnoCSS({
+      /* options */
+    }),
+    createSvgIconsPlugin({
+      // 指定需要缓存的图标文件夹
+      iconDirs: [path.resolve(process.cwd(), "src/assets/icons")],
+      // 指定symbolId格式
+      symbolId: "icon-[dir]-[name]",
+    }),
   ],
   css: {
     // css预处理器
