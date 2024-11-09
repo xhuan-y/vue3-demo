@@ -19,7 +19,18 @@ const toggleTheme = () => {};
     <div class="login-content">内容</div>
 
     <!-- 登录页底部 -->
-    <div class="login-footer">底部</div>
+    <div class="login-footer">
+      <el-text size="small">
+        Copyright © 2021 - 2024 youlai.tech All Rights Reserved.
+        <el-link
+          :underline="false"
+          href="http://beian.miit.gov.cn/"
+          target="_blank"
+        >
+          皖ICP备20006496号-2
+        </el-link>
+      </el-text>
+    </div>
   </div>
 </template>
 
@@ -46,7 +57,10 @@ const toggleTheme = () => {};
     background-color: skyblue;
   }
   .login-footer {
-    background-color: yellow;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
   }
 }
 </style>
