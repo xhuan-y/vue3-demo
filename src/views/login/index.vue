@@ -1,11 +1,65 @@
 <script lang="ts" setup>
+import AuthAPI, { type LoginData } from "@/api/auth";
+
 const isDark = ref(false);
+const loading = ref(false); // 按钮loading状态
+const captchaBase64 = ref(); // 验证码图片base64字符串
 const loginImage = ref(
   new URL("../../assets/images/login-image.svg", import.meta.url).href
 );
 
+const loginData = ref<LoginData>({
+  username: "admin",
+  password: "123456",
+  captchaKey: "",
+  captchaCode: "",
+});
+
+const loginRules = computed(() => {
+  return {
+    username: [
+      {
+        required: true,
+        trigger: "blur",
+        message: "请输入用户名",
+      },
+    ],
+    password: [
+      {
+        required: true,
+        trigger: "blur",
+        message: "请输入密码",
+      },
+      {
+        min: 6,
+        message: "密码不能少于6位",
+        trigger: "blur",
+      },
+    ],
+    captchaCode: [
+      {
+        required: true,
+        trigger: "blur",
+        message: "请输入验证码",
+      },
+    ],
+  };
+});
+
+// 获取验证码
+function getCaptcha() {
+  AuthAPI.getCaptcha().then((data) => {
+    loginData.value.captchaKey = data.captchaKey;
+    captchaBase64.value = data.captchaBase64;
+  });
+}
+
 // 主题切换
 const toggleTheme = () => {};
+
+onMounted(() => {
+  getCaptcha();
+});
 </script>
 
 <template>
@@ -24,7 +78,7 @@ const toggleTheme = () => {};
         <el-image :src="loginImage" style="width: 210px"></el-image>
       </div>
       <div class="login-form">
-        <el-form>
+        <el-form :model="loginData" :rules="loginRules">
           <div class="form-title">
             <h2>vue3-element-admin</h2>
             <el-dropdown style="position: absolute; right: 0">
@@ -35,12 +89,13 @@ const toggleTheme = () => {};
           </div>
 
           <!-- 用户名 -->
-          <el-form-item>
+          <el-form-item prop="username">
             <div class="input-wrapper">
               <el-icon class="mx-2">
                 <i-ep-User />
               </el-icon>
               <el-input
+                v-model="loginData.username"
                 placeholder="用户名"
                 name="username"
                 size="large"
@@ -50,12 +105,13 @@ const toggleTheme = () => {};
           </el-form-item>
 
           <!-- 密码 -->
-          <el-form-item>
+          <el-form-item prop="password">
             <div class="input-wrapper">
               <el-icon class="mx-2">
                 <i-ep-Lock />
               </el-icon>
               <el-input
+                v-model="loginData.password"
                 placeholder="密码"
                 type="password"
                 name="password"
@@ -67,16 +123,21 @@ const toggleTheme = () => {};
           </el-form-item>
 
           <!-- 验证码 -->
-          <el-form-item>
+          <el-form-item prop="captchaCode">
             <div class="input-wrapper">
               <svg-icon icon-class="captcha" class="mx-2" />
               <el-input
+                v-model="loginData.captchaCode"
                 size="large"
                 class="flex-1"
                 placeholder="验证码"
                 autocomplete="off"
               />
-              <el-image class="captcha-img" />
+              <el-image
+                :src="captchaBase64"
+                class="captcha-img"
+                @click="getCaptcha"
+              />
             </div>
           </el-form-item>
 
@@ -86,7 +147,12 @@ const toggleTheme = () => {};
           </div>
 
           <!-- 登录按钮 -->
-          <el-button type="primary" size="large" class="w-full">
+          <el-button
+            :loading="loading"
+            type="primary"
+            size="large"
+            class="w-full"
+          >
             登 录
           </el-button>
 

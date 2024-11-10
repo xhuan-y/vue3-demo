@@ -22,7 +22,7 @@ service.interceptors.response.use(
   (response: AxiosResponse) => {
     const { code, msg } = response.data;
     if (code === "00000") {
-      return response.data;
+      return response.data.data;
     }
 
     ElMessage.error(msg || "系统出错");

@@ -1,17 +1,11 @@
 <script setup lang="ts">
 // import variables from "@/styles/variables.module.scss";
-import { useCounterStore } from "@/store/counter";
-const counterStore = useCounterStore();
 
 // console.log(variables.bgColor);
 </script>
 
 <template>
   <h1>Vite + Vue</h1>
-
-  <div class="card">
-    <button type="button" @click="counterStore.increment">count is {{ counterStore.count }}</button>
-  </div>
 
   <div>
     <el-button type="success"><i-ep-SuccessFilled />Success</el-button>
