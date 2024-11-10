@@ -5,6 +5,7 @@ import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import Icons from "unplugin-icons/vite";
 import IconsResolver from "unplugin-icons/resolver";
+import mockDevServerPlugin from "vite-plugin-mock-dev-server";
 import path from "path";
 import UnoCSS from "unocss/vite";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
@@ -38,6 +39,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     },
     plugins: [
       vue(),
+      env.VITE_MOCK_DEV_SERVER === "true" ? mockDevServerPlugin() : null,
       AutoImport({
         // 要注册的全局导入
         imports: ["vue", "pinia", "vue-router"],
