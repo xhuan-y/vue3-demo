@@ -64,13 +64,14 @@ function getCaptcha() {
 }
 
 // 登录
-function handleLoginSubmit() {
+async function handleLoginSubmit() {
   loginFormRef.value?.validate((valid: boolean) => {
     if (valid) {
       loading.value = true;
       userStore
         .login(loginData.value)
-        .then(() => {
+        .then(async () => {
+          await userStore.getUserInfo();
           router.push("/");
         })
         .catch(() => {

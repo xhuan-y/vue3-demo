@@ -42,7 +42,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       env.VITE_MOCK_DEV_SERVER === "true" ? mockDevServerPlugin() : null,
       AutoImport({
         // 要注册的全局导入
-        imports: ["vue", "pinia", "vue-router"],
+        imports: ["vue", "@vueuse/core", "pinia", "vue-router"],
         resolvers: [
           ElementPlusResolver(),
           // 自动导入图标组件
