@@ -86,6 +86,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         // 自定义全局css变量
         scss: {
+          api: "modern-compiler",
           javascriptEnabled: true,
           additionalData: `@use "@/styles/variables.scss" as *;`,
         },

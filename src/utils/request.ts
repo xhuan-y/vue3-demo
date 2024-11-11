@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosResponse } from "axios";
+import { ResultEnum } from "@/enums/ResultEnum";
 import { getToken } from "./auth";
 
 // 创建axios实例
@@ -25,9 +26,16 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const { code, msg } = response.data;
-    if (code === "00000") {
-      return response.data.data;
+    if (
+      response.config.responseType === "blob" ||
+      response.config.responseType === "arraybuffer"
+    ) {
+      return response;
+    }
+
+    const { code, data, msg } = response.data;
+    if (code === ResultEnum.SUCCESS) {
+      return data;
     }
 
     ElMessage.error(msg || "系统出错");
@@ -36,7 +44,16 @@ service.interceptors.response.use(
   (error: any) => {
     if (error.response.data) {
       const { code, msg } = error.response.data;
-      ElMessage.error(msg || "系统出错");
+      if (code === ResultEnum.TOKEN_INVALID) {
+        ElNotification({
+          title: "提示",
+          message: "您的会话已过期，请重新登录",
+          type: "info",
+        });
+        // TODO:清理用户信息
+      } else {
+        ElMessage.error(msg || "系统出错");
+      }
     }
     return Promise.reject(error);
   }

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { type LocationQuery, useRoute } from "vue-router";
+
 import AuthAPI, { type LoginData } from "@/api/auth";
 import router from "@/router";
 
@@ -8,6 +10,7 @@ import { useUserStore } from "@/store";
 
 const userStore = useUserStore();
 
+const route = useRoute(); // useRoute:获取当前路由信息
 const loginFormRef = useTemplateRef<FormInstance>("loginFormRef");
 
 const isDark = ref(false);
@@ -72,7 +75,9 @@ async function handleLoginSubmit() {
         .login(loginData.value)
         .then(async () => {
           await userStore.getUserInfo();
-          router.push("/");
+          // TODO:路由跳转前加载字典数据
+          const { path, queryParams } = parseRedirect();
+          router.push({ path: path, query: queryParams });
         })
         .catch(() => {
           getCaptcha();
@@ -82,6 +87,28 @@ async function handleLoginSubmit() {
         });
     }
   });
+}
+
+// 解析 redirect 字符串 为 path 和 queryParams
+function parseRedirect(): {
+  path: string;
+  queryParams: Record<string, string>;
+} {
+  const query: LocationQuery = route.query;
+  // TODO:这里的query.redirect没搞懂
+  // query.redirect：用于获取当前URL中路由参数为“redirect”的值，通常用于在页面跳转之前记录当前页面的路径，以便在登录之后可以返回到原来的页面
+  const redirect = (query.redirect as string) ?? "/"; // ?? 后面是默认值
+
+  const url = new URL(redirect, window.location.origin); // new URL(hash, host)
+  const path = url.pathname; // https://developer.mozilla.org/pathname?q=value"
+  const queryParams: Record<string, string> = {}; //Record<K,T>：将K中每个属性都转为T类型
+
+  // url.searchParams：用于处理 URL 查询参数的接口
+  url.searchParams.forEach((value, key) => {
+    queryParams[key] = value;
+  });
+
+  return { path, queryParams };
 }
 
 // 主题切换
