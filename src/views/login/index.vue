@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import AuthAPI, { type LoginData } from "@/api/auth";
+import type { FormInstance } from "element-plus";
+
+const loginFormRef = useTemplateRef<FormInstance>("loginFormRef");
 
 const isDark = ref(false);
 const loading = ref(false); // 按钮loading状态
@@ -54,6 +57,17 @@ function getCaptcha() {
   });
 }
 
+// 登录
+function handleLoginSubmit() {
+  loginFormRef.value?.validate((valid: boolean) => {
+    if (valid) {
+      console.log(valid);
+    } else {
+      console.log(valid);
+    }
+  });
+}
+
 // 主题切换
 const toggleTheme = () => {};
 
@@ -78,7 +92,7 @@ onMounted(() => {
         <el-image :src="loginImage" style="width: 210px"></el-image>
       </div>
       <div class="login-form">
-        <el-form :model="loginData" :rules="loginRules">
+        <el-form ref="loginFormRef" :model="loginData" :rules="loginRules">
           <div class="form-title">
             <h2>vue3-element-admin</h2>
             <el-dropdown style="position: absolute; right: 0">
@@ -118,6 +132,7 @@ onMounted(() => {
                 size="large"
                 class="h-[48px] pr-2"
                 show-password
+                @keyup.enter="handleLoginSubmit"
               />
             </div>
           </el-form-item>
@@ -132,6 +147,7 @@ onMounted(() => {
                 class="flex-1"
                 placeholder="验证码"
                 autocomplete="off"
+                @keyup.enter="handleLoginSubmit"
               />
               <el-image
                 :src="captchaBase64"
@@ -152,6 +168,7 @@ onMounted(() => {
             type="primary"
             size="large"
             class="w-full"
+            @click.prevent="handleLoginSubmit"
           >
             登 录
           </el-button>
