@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import AuthAPI, { type LoginData } from "@/api/auth";
+import router from "@/router";
+
 import type { FormInstance } from "element-plus";
+
+import { useUserStore } from "@/store";
+
+const userStore = useUserStore();
 
 const loginFormRef = useTemplateRef<FormInstance>("loginFormRef");
 
@@ -61,9 +67,18 @@ function getCaptcha() {
 function handleLoginSubmit() {
   loginFormRef.value?.validate((valid: boolean) => {
     if (valid) {
-      console.log(valid);
-    } else {
-      console.log(valid);
+      loading.value = true;
+      userStore
+        .login(loginData.value)
+        .then(() => {
+          router.push("/");
+        })
+        .catch(() => {
+          getCaptcha();
+        })
+        .finally(() => {
+          loading.value = false;
+        });
     }
   });
 }
