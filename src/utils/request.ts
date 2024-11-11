@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosResponse } from "axios";
+import { getToken } from "./auth";
 
 // 创建axios实例
 const service = axios.create({
@@ -10,6 +11,10 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const accessToken = getToken();
+    if (accessToken) {
+      config.headers.Authorization = accessToken;
+    }
     return config;
   },
   (error: any) => {
