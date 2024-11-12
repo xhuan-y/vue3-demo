@@ -29,6 +29,7 @@ declare module 'vue' {
     IEpWarningFilled: typeof import('~icons/ep/warning-filled')['default']
     IEpWarnTriangleFilled: typeof import('~icons/ep/warn-triangle-filled')['default']
     LangSelect: typeof import('./../components/LangSelect/index.vue')['default']
+    MyNotice: typeof import('./../views/system/notice/components/MyNotice.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./../components/SvgIcon/index.vue')['default']

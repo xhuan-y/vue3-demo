@@ -5,20 +5,78 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 
-export const HelloWorld = () => import("@/components/HelloWorld.vue");
+// TODO:这里为啥要导出？
+export const Layout = () => import("@/layout/index.vue");
 
-const routes: RouteRecordRaw[] = [
-  { path: "/", component: HelloWorld },
-  { path: "/about", component: () => import("@/components/About.vue") },
+export const constantRoutes: RouteRecordRaw[] = [
+  {
+    path: "/redirect",
+    component: Layout,
+    meta: { hidden: true }, // TODO:hidden:true代表什么意思？
+    children: [
+      {
+        path: "/redirect/:path(.*)", // TODO:这是代表什么意思？
+        component: () => import("@/views/redirect/index.vue"),
+      },
+    ],
+  },
   {
     path: "/login",
     component: () => import("@/views/login/index.vue"),
+    meta: { hidden: true },
+  },
+  {
+    path: "/",
+    name: "/",
+    component: Layout,
+    redirect: "/dashboard",
+    children: [
+      {
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index.vue"),
+        // 用于 keep-alive 功能，需要与 SFC 中自动推导或显式声明的组件名称一致
+        // 参考文档: https://cn.vuejs.org/guide/built-ins/keep-alive.html#include-exclude
+        name: "Dashboard",
+        meta: {
+          title: "dashboard",
+          icon: "homepage",
+          affix: true, // TODO:这是什么？
+          keepAlive: true, // TODO:这会缓存组件吗？
+        },
+      },
+      {
+        path: "401",
+        component: () => import("@/views/error/401.vue"),
+        meta: { hidden: true },
+      },
+      {
+        path: "404",
+        component: () => import("@/views/error/404.vue"),
+        meta: { hidden: true },
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: () => import("@/views/profile/index.vue"),
+        meta: { title: "个人中心", icon: "user", hidden: true },
+      },
+      {
+        path: "myNotice",
+        name: "MyNotice",
+        component: () =>
+          import("@/views/system/notice/components/MyNotice.vue"),
+        meta: { title: "我的通知", icon: "user", hidden: true },
+      },
+    ],
   },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes: constantRoutes,
+  // 刷新时，滚动条位置还原
+  // TODO:为什么可以这么设置？
+  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
 // 全局注册 router

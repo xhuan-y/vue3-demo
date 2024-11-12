@@ -1,4 +1,5 @@
 import { store } from "@/store";
+import { usePermissionStoreHook } from "@/store/modules/permission";
 
 import AuthAPI, { type LoginData } from "@/api/auth";
 import UserAPI, { type UserInfo } from "@/api/system/user";
@@ -42,7 +43,19 @@ export const useUserStore = defineStore("user", () => {
     });
   }
 
-  return { login, getUserInfo };
+  // TODO:登出
+
+  // 清理用户会话
+  function clearUserSession() {
+    return new Promise<void>((resolve) => {
+      clearToken();
+      usePermissionStoreHook().resetRouter();
+      // TODO:清除字典
+      resolve();
+    });
+  }
+
+  return { userInfo, login, getUserInfo, clearUserSession };
 });
 
 // 用于在组件外部（如在Pinia Store 中）使用 Pinia 提供的 store 实例
