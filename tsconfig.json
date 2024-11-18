@@ -12,7 +12,9 @@
       // 路径映射，相对于baseUrl
       "@/*": ["src/*"]
     },
-    "allowSyntheticDefaultImports": true // 允许默认导入
+    // 模块和兼容性相关配置
+    "allowSyntheticDefaultImports": true, // 允许默认导入
+    "resolveJsonModule": true
   },
   "include": ["mock/**/*.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts"],
   "exclude": ["node_modules", "dist"]
